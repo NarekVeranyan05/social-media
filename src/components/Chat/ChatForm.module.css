@@ -1,0 +1,32 @@
+
+
+
+@keyframes send-button-clicked {
+    0% {
+      animation-timing-function: step-end;
+      }
+      10% {
+        animation-timing-function: step-end;
+        transform: translateX(60vw);
+      }
+      90% {
+        animation-timing-function: step-end;
+        transform: translateX(65vw);
+      }
+      100% {
+        animation-timing-function: step-end;
+        transform: translateX(100vw);
+      }
+}
+.Input:hover .SendButton{
+    transform: translateX(-10px);
+}
+
+.SendButton{
+    transition: all 0.3s;
+}
+
+.SendButton:active{
+    transform: translateX(0px);
+    animation: send-button-clicked 2s;
+}

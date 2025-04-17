@@ -1,3 +1,21 @@
+@import "./index.css";
+
+/* In light mode: text-color = white */
+/* In dark mode: text-color = background */
+:root{
+  --background: white; 
+  --main: rgb(24, 125, 233);
+  --secondary:  rgb(50, 157, 192);
+  --shadow: rgba(36, 33, 33, 0.705);
+  --search: rgba(24, 125, 233, 0.602);
+  --error: rgb(193, 55, 55);
+
+  --backgroundDark: rgb(0, 0, 0);
+  --mainDark: rgb(5, 74, 148);
+  --secondaryDark:  rgb(5, 74, 148);
+  --shadowDark: rgba(180, 175, 175, 0.794);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +28,28 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+/* 
+dark
+stateCopy.background = "rgba(81, 80, 80, 0.794)"
+stateCopy.main = "rgb(5, 74, 148)"
+stateCopy.secondary = "rgb(5, 74, 148)"
+stateCopy.shadow = "rgba(81, 80, 80, 0.794)" */
+
+/* 
+light
+var stateCopy = {...state}
+stateCopy.background = "white"
+stateCopy.main = "rgb(24, 125, 233)"
+stateCopy.secondary = "rgb(50, 157, 192)"
+stateCopy.shadow = "rgba(36, 33, 33, 0.705)" */
+
+/* error: "rgb(193, 55, 55)" */
+
+@media (prefers-color-scheme: dark){
+  body{
+    background-color: var(--backgroundDark);
+  }
 }
