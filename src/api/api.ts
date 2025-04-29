@@ -2,10 +2,26 @@ import axios from "axios"
 import { ContactsType, DataType, PhotosType } from "../Redux/UserDataReducer"
 import { UserServerType } from "../Redux/UsersDataReducer"
 import { NullableType } from "../types"
+import { totalmem } from "os"
 
 const instance1 = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.0/",
-    withCredentials: true
+    withCredentials: true,
+})
+
+const instance3 = axios.create({
+    baseURL: "https://social-network.samuraijs.com/api/1.0/",
+    withCredentials: true,
+    headers:{
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        // 'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${'e0ee24f7-8363-444d-8abe-81c52f73100e'}` // manually change after each login at https://social-network.samuraijs.com/account
+    }
+})
+
+const instance2 = axios.create({
+    baseURL: "https://social-network.samuraijs.com/api/1.0/",
 })
 
 //authAPI
@@ -38,7 +54,8 @@ export const authAPI = {
     },
     logoutUser: async() => {
         try{
-            let response = await instance1.delete<LogoutUserResponseType>("auth/login")
+            let response = await instance1.post<LogoutUserResponseType>("auth/logout")
+            localStorage.clear()
             return response.data
         } catch(error){
             return {data: {}, resultCode: 1, messages: [`${error}`]}
@@ -60,19 +77,19 @@ type PutPhotoResponseType = {
 export const profileAPI = {
     getUser: async(userID: number | null) => {
         try{
-            let response = await instance1.get<DataType>(`profile/${userID}`)
+            let response = await instance2.get<DataType>(`profile/${userID}`)
             return response.data   
         } catch(error){
             return {aboutMe: null, contacts: {facebook: null, website: null, vk: null, twitter: null, instagram: null, youtube: null, github: null, mainLink: null}, lookingForAJob: null, lookingForAJobDescription: null, fullName: "", userId: null, photos: {small: null, large: null}, messages: [`${error}`]}
         }
     },
     getFollow: async(userID: number | null) => {
-        let response = await instance1.get<boolean>(`follow/${userID}`) 
-        return response.data
+        // let response = await instance2.get<boolean>(`follow/${userID}`) 
+        return false
     },
     getStatus: async(userID: number | null) => {
         try{
-            let response = await instance1.get<string | null>(`profile/status/${userID}`)
+            let response = await instance2.get<string | null>(`profile/status/${userID}`)
             return {status: response.data, messages: []}
         } catch(error){
             return {status: null, messages: [`${error}`]}
@@ -88,7 +105,7 @@ export const profileAPI = {
     },
     putPhoto: async(data: object) => {
         try{
-            let response = await instance1.put<PutPhotoResponseType>("profile/photo", data)
+            let response = await instance3.put<PutPhotoResponseType>("profile/photo", data)
             return response.data
         }catch(error){
             return {data: {small: null, large: null}, messages: [`${error}`], resultCode: 1}
@@ -115,10 +132,21 @@ export const usersAPI = {
         //friend: if asking for only followed (true), only not followec (false), or all (null) users
         let response
         if(friend === null)
-            response = await instance1.get<GetUsersResponseType>(`users?count=${count}&page=${page}&term=${term}`)
-        else
-            response = await instance1.get<GetUsersResponseType>(`users?count=${count}&page=${page}&term=${term}&friend=${friend}`)
-        return response.data
+            try{
+                response = await instance2.get<GetUsersResponseType>(`users?count=${count}&page=${page}&term=${term}`)
+                return response.data
+            } catch(error){
+                return {items: [], totalCount: 0, error: null}
+            }
+        else{
+            try{
+                response = await instance2.get<GetUsersResponseType>(`users?count=${count}&page=${page}&term=${term}&friend=${friend}`)
+                return response.data
+            } catch(error){
+                return {items: [], totalCount: 0, error: null}
+            }
+        }
+
     },
     postFollow: async(userID: number | null) => {
         let response = await instance1.post<PostFollowResponseType>(`/follow/${userID}`)
