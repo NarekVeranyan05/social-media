@@ -1,32 +1,45 @@
-Vision Statement
+---
+TITLE: Social Media Platform Project Description and Setup Guide
+DATE: April 24, 2026
+AUTHOR: Narek Veranyan
+---
 
-This project implements a social media platform that enables users to connect and interact in real time. Core functionality includes user discovery via search, the ability to follow other users, profile management (including status updates and profile picture changes), and live chat messaging between users.
+# Vision Statement
 
-How to Run
+* This project implements a social media platform designed for real-time user interaction.
+* It supports user discovery through search functionality.
+* It enables users to follow and manage connections with other users.
+* It provides profile management features, including:
 
-This application relies on an educational, remotely hosted API server. Full API documentation is available at:
+  * Status updates
+  * Profile picture changes
+* It includes a live chat system for direct messaging between users.
 
-https://social-network.samuraijs.com/docs#
+---
 
-Default Account Limitations
+HOW TO RUN
+The application depends on an educational, remotely hosted API server. Full API documentation is available at:
+[https://social-network.samuraijs.com/docs#](https://social-network.samuraijs.com/docs#)
 
-The default credentials provided by the API:
+DEFAULT ACCOUNT LIMITATIONS
+The provided default credentials are:
 
-Email: free@samuraijs.com
+Email: [free@samuraijs.com](mailto:free@samuraijs.com)
 Password: free
 
-are unreliable due to server-side issues. In particular, certain endpoints (e.g., user listing) may fail with internal server errors caused by API instability. Despite this, the application interface will still load correctly.
+These credentials are unreliable due to server-side instability. Certain endpoints (notably user retrieval) may fail with internal server errors. The application interface will still load, but functionality may be incomplete.
 
-Recommended Setup (Full Functionality)
+RECOMMENDED SETUP (FULL FUNCTIONALITY)
+To ensure full system functionality, proceed as follows:
 
-To ensure full functionality of the application, follow these steps:
+1. Register an account at:
+   [https://social-network.samuraijs.com/signUp](https://social-network.samuraijs.com/signUp)
 
-Register an account at:
-https://social-network.samuraijs.com/signUp
-After registration, you will be redirected to a page displaying your API key.
-Copy the provided API key.
+2. After registration, you will be redirected to a page containing your API key.
 
-Paste the API key into the project configuration file:
-src/api/api.ts
+3. Copy the API key.
 
-Replace the "API-KEY" field in both instance and uploadInstance with your key.
+4. Insert the API key into the project configuration file:
+   src/api/api.ts
+
+Replace the "API-KEY" field in both the instance and uploadInstance configurations with your key.
