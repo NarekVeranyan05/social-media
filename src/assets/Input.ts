@@ -23,22 +23,25 @@ export const InputContainer = styled.div`
     position: relative;
     justify-content: center;
     align-items: center;
-    width: 70%;
-    height: 70px;
-    margin-bottom: 20px;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 56px;
 `
 
 export const Input = styled.input`
-    padding: 10px;
+    padding: 0.95rem 1rem;
     width: 100%;
-    height: 50px;
+    min-height: 52px;
     
     resize: none;
     outline: none;
     font-size: 1rem;
     font-weight: 500;
-    border: 0.07cm solid transparent;
-    border-radius: 20px;
+    color: var(--text);
+    background-color: var(--surfaceAlt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-sizing: border-box;
     &:focus{
         animation-name: ${inputSelected};
         animation-fill-mode: forwards;
@@ -51,10 +54,10 @@ export const Input = styled.input`
     }
 
     @media (prefers-color-scheme: dark){
-        background-color: var(--shadowDark);
-        color: var(--background);
+        background-color: var(--surfaceAlt);
+        color: var(--text);
         &::placeholder{
-            color: var(--background);
+            color: var(--textSoft);
         }
     };
 `

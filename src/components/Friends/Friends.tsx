@@ -113,13 +113,13 @@ const Friends = () => {
 const StyledFriendsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     align-items: center;
     position: relative;
-    width: 100vw;
-    height: 100%;
-    margin-top: 40px;
-    margin-bottom: 60px;
+    width: min(100%, 960px);
+    margin: 0 auto;
+    padding: 1.75rem clamp(1rem, 2.4vw, 1.75rem) 3rem;
+    box-sizing: border-box;
+    gap: 1rem;
 `
 
 export default Friends

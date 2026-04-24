@@ -42,37 +42,45 @@ const StyledHeaderContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     position: fixed;
+    inset: 0 0 auto 0;
     width: 100%;
-    height: 60px;
-    top: 0;
+    min-height: var(--headerHeight);
+    padding: 0 clamp(1rem, 3vw, 2rem);
     z-index: 300;
-
+    box-sizing: border-box;
     color: whitesmoke;
-    background-image: linear-gradient(to right top, var(--main), var(--secondary) 100%);
-    border-bottom: 0.01cm rgba(36, 33, 33, 0.705) solid;
+    background: linear-gradient(135deg, rgba(24, 125, 233, 0.94), rgba(50, 157, 192, 0.94));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 10px 28px rgba(22, 48, 92, 0.16);
+    backdrop-filter: blur(14px);
     user-select: none;
+
     &:hover{
         cursor:default;
     }
 
     @media (prefers-color-scheme: dark){
-        background-image: linear-gradient(to right top, var(--mainDark), var(--secondaryDark) 100%);
+        background: linear-gradient(135deg, rgba(5, 74, 148, 0.94), rgba(18, 107, 184, 0.94));
+        border-bottom-color: rgba(255, 255, 255, 0.1);
     }
 `
 
 const Title = styled.h1`
-    width: 100px;
-    margin-left: 20px;
-    text-shadow: 0px 2px 2px rgba(36, 33, 33, 0.705);
+    margin: 0;
+    min-width: fit-content;
+    font-size: clamp(1.6rem, 2.2vw, 2rem);
+    letter-spacing: 0.04em;
+    text-shadow: 0px 2px 8px rgba(36, 33, 33, 0.28);
 `
 
 const User = styled.div`
     display: flex;
+    align-items: center;
     width: fit-content;
     position: relative;
-    font-size: 1.3rem;
-    font-weight: 500;
-    margin-right: 20px;
+    font-size: clamp(1rem, 1.7vw, 1.15rem);
+    font-weight: 600;
+    margin-left: auto;
     &:after{
         content: '';
         position: absolute;
@@ -92,13 +100,13 @@ const User = styled.div`
         cursor: pointer;
         &:after{
             width: 100%;
-            background: var(--shadow);
+            background: rgba(255, 255, 255, 0.9);
         }
     }
     @media (prefers-color-scheme: dark){
         &:hover{
             &:after{
-                background: var(--shadowDark)
+                background: rgba(255, 255, 255, 0.9)
             }
         }
     }
@@ -109,34 +117,34 @@ const Login = styled(NavLink)`
     justify-content: center;
     align-items: center;
     width: fit-content;
-    height: 35px;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-right: 10px;
+    min-height: 44px;
+    padding: 0.7rem 1.1rem;
+    margin-left: auto;
 
     font-size: 1rem;
     font-weight: 800;
     text-decoration: none;
     color: var(--main);
-    background-color: whitesmoke;
-    border: 0.1cm transparent;
-    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    box-shadow: var(--softShadow);
 
-    transition: all 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 
     &:hover{
         cursor: pointer;
+        transform: translateY(-1px);
     }
     &:active{
-        background-color: var(--shadow);
+        background-color: rgba(255, 255, 255, 0.82);
         color: whitesmoke;
-        transition: all 0.2s;
     }
 
     @media (prefers-color-scheme: dark){
-        color: var(--mainDark)
+        color: var(--mainDark);
         &:active{
-            background-color: var(--shadowDark)
+            background-color: var(--shadowDark);
         }
     }
 `
@@ -144,8 +152,15 @@ const Login = styled(NavLink)`
 const ButtonsContainer = styled.div`
     display: flex;
     align-items: center;
+    gap: 0.75rem;
     width: fit-content;
     height: 100%;
+    margin-left: auto;
+
+    @media screen and (max-width: 520px) {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
 `
 const Button = styled.button`
     display: flex;
@@ -153,27 +168,27 @@ const Button = styled.button`
     justify-content: center;
     align-items: center;
     width: fit-content;
-    height: 35px;
-    padding: 20px;
-    margin-right: 10px;
+    min-height: 44px;
+    padding: 0.7rem 1.1rem;
 
     font-size: 1rem;
     font-weight: 800;
     text-decoration: none;
     color: var(--main);
-    background-color: whitesmoke;
-    border: 0.1cm transparent;
-    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    box-shadow: var(--softShadow);
 
-    transition: all 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 
     &:hover{
         cursor: pointer;
+        transform: translateY(-1px);
     }
     &:active{
-        background-color: var(--shadow);
+        background-color: rgba(255, 255, 255, 0.82);
         color: whitesmoke;
-        transition: all 0.2s;
     }
 
     @media (prefers-color-scheme: dark){
@@ -187,14 +202,15 @@ const Button = styled.button`
 
 const NavContainer = styled.div`
     display: flex;
-    position: absolute;
-    justify-content: space-around;
+    position: relative;
+    justify-content: center;
     align-items: center;
     width: max-content;
     height: 100%;
-    left: 120px;
+    gap: clamp(0.75rem, 2vw, 2rem);
+    margin-left: clamp(1rem, 3vw, 3rem);
 
-    @media screen and (max-width: 720px){
+    @media screen and (max-width: 900px){
         display: none;
     }
 `
@@ -202,14 +218,12 @@ const NavButton = styled(NavLink)`
     display: flex;
     width: fit-content;
     position: relative;
-    margin-right: 3vw;
-    margin-left: 3vw;
 
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 1.6vw, 1.08rem);
     color: whitesmoke;
     text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s;
+    font-weight: 600;
+    transition: color 0.2s ease;
     &:after{
         content: '';
         position: absolute;
@@ -229,29 +243,22 @@ const NavButton = styled(NavLink)`
         cursor: pointer;
         &:after{
             width: 100%;
-            background: var(--shadow);
+            background: rgba(255, 255, 255, 0.92);
         }
     }
 
     &:active{
-        color: var(--shadow);
-        text-shadow:0px 1px 1px rgba(196, 192, 192, 0.767);
-        transition: all 0.2s;
-    }
-
-    @media screen and (min-width: 900px){
-        margin-right: 5vw;
-        margin-left: 5vw;
+        color: rgba(255, 255, 255, 0.82);
     }
 
     @media (prefers-color-scheme: dark){
         &:hover{
             &:after{
-                background: var(--shadowDark);
+                background: rgba(255, 255, 255, 0.9);
             }
         };
         &:active{
-            color: var(--whitesmoke);
+            color: rgba(255, 255, 255, 0.82);
         };
     }
 `

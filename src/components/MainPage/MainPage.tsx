@@ -42,7 +42,7 @@ const MainPage = () => {
     const setTermQuery = (newTermQuery: string) => dispatch(usersDataActionCreators.setTermQueryActioNCreator(newTermQuery))
     const setFriendQuery = (newFriendQuery: NullableType<boolean>) => dispatch(usersDataActionCreators.setFriendQueryActionCreator(newFriendQuery))
 
-    //locat state
+    //local state
     let [portionNumber, setPortionNumber] = useState(1) //The portion we request
     let [pagesPerPortion, setPagesPerPortion] = useState(5) //How many pages a portion contains
     let [maxPortionNumber, setMaxPortionNumber] = useState(Math.ceil(maxPage/pagesPerPortion)) //The amount of portions
@@ -141,8 +141,10 @@ const MainPage = () => {
             <SearchContainer>
                 <SearchForm isNoFriendQuery={false} page={page} termQuery={termQuery} friendQuery={friendQuery} setTermQuery={setTermQuery} setFriendQuery={setFriendQuery}/>
             </SearchContainer>
-            {usersCopy.length !== 0 ? usersCopy : (!isLoading && <EmptySearchResults>No Users Found</EmptySearchResults>)}
-            {isLoading && <UserSkeleton amount={count}/>}
+            <UsersGrid>
+                {usersCopy.length !== 0 ? usersCopy : (!isLoading && <EmptySearchResults>No Users Found</EmptySearchResults>)}
+                {isLoading && <UserSkeleton amount={count}/>}
+            </UsersGrid>
             <Paginator>
                 {portionNumber !== 1 && <PortionSwitch onClick={() => changePortion("back")}>
                     <span className="material-symbols-outlined">arrow_back</span>Back
@@ -162,18 +164,13 @@ export default MainPage
 const StyledMainPageContainer = styled.div`
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     align-items: center;
     position: relative;
-    width: 100vw;
-    height: 100%;
-    margin-top: 40px;
-    margin-bottom: 60px;
-
-    @media screen and (min-width: 900px){
-        flex-direction: row;
-        justify-content: space-evenly;
-    }
+    width: min(100%, var(--pageMaxWidth));
+    margin: 0 auto;
+    padding: 1.75rem clamp(1rem, 2.4vw, 1.75rem) 3rem;
+    box-sizing: border-box;
+    gap: 1.25rem;
 `
 
 export const SearchContainer = styled.div`
@@ -181,44 +178,60 @@ export const SearchContainer = styled.div`
     justify-content: center;
     width: 100%;
     height: fit-content;
+    margin-bottom: 0.5rem;
+`
+
+const UsersGrid = styled.div`
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    justify-items: center;
+    width: 100%;
+    gap: 1.5rem;
+
+    @media screen and (min-width: 1080px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 `
 
 export const Paginator = styled.div`
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
-    width: fit-content;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
     height: fit-content;
-    margin: 0px 10px 40px;
-
-    @media screen and (min-width: 900px){
-        width: 40vw;
-        justify-content: center;
-    }
+    margin: 0;
 `
 export const PortionSwitch = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 15vw;
-    height: 35px;
+    gap: 0.35rem;
+    min-width: 116px;
+    min-height: 44px;
+    padding: 0 1rem;
 
     user-select: none;
     font-size: 1rem;
     font-weight: 800;
     text-decoration: none;
     color: whitesmoke;
-    background-image: linear-gradient(to bottom right, var(--main), var(--secondary));
-    border: 0.1cm transparent;
-    border-radius: 20px;
+    background: var(--cardGradient);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    box-shadow: var(--softShadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 
     &:hover{
         cursor: pointer;
+        transform: translateY(-1px);
+        box-shadow: var(--cardShadow);
     };
 
     @media (prefers-color-scheme: dark){
-        background-image: linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark));
+        background: var(--cardGradient);
     }
 `
-

@@ -46,20 +46,22 @@ const InputContainer = styled.form`
     position: relative;
 
     width: 100%;
-    height: 60%;
+    min-height: 64px;
 `
 
 
 const Input = styled.input<{isselected: boolean | null}>`
-    padding: 10px;
+    padding: 1rem 1.1rem;
     width: 100%;
-    height: 100%;
+    min-height: 64px;
     resize: none;
     outline: none;
     font-size: 1rem;
     font-weight: 500;
+    color: var(--text);
+    background-color: rgba(255, 255, 255, 0.94);
     border: 0.07cm solid transparent;
-    border-radius: 20px;
+    border-radius: var(--radiusMd);
 
     animation-name: ${props => {
         if(props.isselected === null){
@@ -74,10 +76,10 @@ const Input = styled.input<{isselected: boolean | null}>`
     animation-fill-mode: forwards;
     animation-duration: 0.8s;
     @media (prefers-color-scheme: dark){
-        background-color: var(--shadowDark);
-        color: var(--background);
+        background-color: rgba(13, 19, 31, 0.78);
+        color: var(--text);
         &::placeholder{
-            color: var(--background);
+            color: var(--textSoft);
         }
     }
 `

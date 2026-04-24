@@ -33,28 +33,40 @@ export default Friend
 const StyledContactContainer = styled.div`
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    aling-items; center;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     position: relative;
-    width: 90vw;
-    height: 60px;
-    margin-bottom: 40px;
-    padding: 10px;
+    width: 100%;
+    min-height: 84px;
+    margin: 0;
+    padding: 0.85rem 1rem;
+    box-sizing: border-box;
     
-    border-bottom: 0.1cm var(--secondary) solid;
+    background-color: var(--surfaceAlt);
+    border: 1px solid var(--border);
+    border-radius: var(--radiusMd);
+    box-shadow: var(--softShadow);
     @media (prefers-color-scheme: dark){
-        border-bottom: 0.1cm var(--secondaryDark) solid;
+        background-color: var(--surfaceAlt);
+    }
+
+    @media screen and (max-width: 560px) {
+        flex-wrap: wrap;
+        justify-content: flex-start;
     }
 `
 const LinkToChat = styled(NavLink)`
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    width:calc(100% - 20vw);
+    align-items: center;
+    gap: 1rem;
+    flex: 1 1 220px;
+    min-width: 0;
     height: 100%;
 
     text-decoration: none;
-    color: black;
+    color: var(--text);
 `
 const ContactImage = styled.span<{image: null | string}>`
     display: flex;
@@ -62,61 +74,62 @@ const ContactImage = styled.span<{image: null | string}>`
     align-items: center;
     position: relative;
     width: 60px;
-    margin-left: 10px;
     height: 60px;
 
-    border-radius: 100vh;
-    background-color: whitesmoke;
+    border-radius: 999px;
+    background-color: rgba(24, 125, 233, 0.12);
     background-image: ${(props) => props.image === null ? "none" : `url(${props.image})`};
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
+    background-position: center;
     background-origin: border-box;
 
     font-size: 3em;
+    color: var(--main);
 `
 const ContactName = styled.div`
     display: flex;
     width: fit-content;
-    justify-self: left;
+    min-width: 0;
     align-self: center;
 
-    font-size: 1.3rem;
-    margin-left: 20px;
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    font-weight: 600;
+    overflow-wrap: anywhere;
     @media (prefers-color-scheme: dark){
-        color: var(--background);
+        color: var(--text);
     }
 `
 const Follow = styled.button`
     display: flex;
-    position: absolute;
-    right: 10px;
-    align-self: center;
     justify-content: center;
     align-items: center;
     width: fit-content;
-    padding: 20px;
-    height: 35px;
+    min-height: 42px;
+    padding: 0.7rem 1rem;
 
     font-size: 1rem;
     font-weight: 800;
     text-decoration: none;
     color: var(--main);
-    background-color: whitesmoke;
-    border: 0.1cm transparent;
-    border-radius: 20px;
-    transition: all 0.2s;
+    background-color: rgba(24, 125, 233, 0.08);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
     &:hover {
         cursor: pointer;
+        transform: translateY(-1px);
     };
-    &:active {
-        background-color: var(--shadow);
-        color: whitesmoke;
+    &:disabled {
+        cursor: wait;
+        opacity: 0.7;
     };
 
     @media (prefers-color-scheme: dark){
         color: var(--mainDark);
-        &:active{
-            background-color: var(--shadowDark)
-        }
+    }
+
+    @media screen and (max-width: 560px) {
+        width: 100%;
     }
 `

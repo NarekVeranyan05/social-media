@@ -5,7 +5,6 @@ import userDataReducer from "./UserDataReducer";
 import usersDataReducer from "./UsersDataReducer";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { buildGetDefaultMiddleware } from "@reduxjs/toolkit/dist/getDefaultMiddleware";
 import { chatDataReducer } from "./ChatDataReducer";
 
 export const reducer = combineReducers({

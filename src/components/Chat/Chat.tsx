@@ -80,40 +80,42 @@ export const Chat = () => {
 
 const StyledChatContainer = styled.div`
     display: block;
-    position: absolute;
-    width: 100vw;
-    height: calc(100vh - 60px);
+    position: relative;
+    width: 100%;
+    padding: 1.25rem 1rem 2rem;
+    box-sizing: border-box;
 `
 
 const ChatBox = styled.div`
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     position: relative;
-    width: 90%;
-    height: calc(100% - 120px);
+    width: min(100%, 760px);
+    min-height: calc(100vh - 180px);
     margin: 0 auto;
-    margin-top: 40px;
 
-    background-image: linear-gradient(to bottom right, var(--main), var(--secondary));
-    border-radius: 20px;
-    overflow-y: scroll;
-    scroll-snap-type:y mandatory;
+    background-color: var(--surface);
+    border-radius: var(--radiusLg);
+    overflow: hidden;
+    box-shadow: var(--cardShadow);
 
     @media (prefers-color-scheme: dark){
-        background-image: linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark));
+        background-color: var(--surface);
     }
 `
 
 const MessagesContainer = styled.div`
+    box-sizing: border-box;
+    flex: 1 1 auto;
     width: 100%;
-    height: calc(100% - 110px);
+    min-height: 0;
+    padding: 1rem;
 
-    border-bottom: var(--background) solid 0.1cm;
-    background-color: var(--shadow);
-    overflow-y: scroll;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(24, 125, 233, 0.08), transparent 30%), var(--surfaceAlt);
+    overflow-y: auto;
 
     @media (prefers-color-scheme: dark){
-        border-bottom: var(--backgroundDark) solid 0.1cm;
+        border-bottom: 1px solid var(--border);
     }
 `

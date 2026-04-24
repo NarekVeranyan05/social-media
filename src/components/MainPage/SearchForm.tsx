@@ -140,7 +140,7 @@ const Form = styled.form`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 80px;
+    min-height: 80px;
 `
 
 const UserNameInputContainer = styled.div`
@@ -148,13 +148,16 @@ const UserNameInputContainer = styled.div`
     position: relative;
     justify-content: center;
     align-items: center;
-    width: 80%;
-    height: fit-content;
-    margin-bottom: 20px;
+    width: min(100%, 980px);
+    min-height: 68px;
+    margin: 0;
+    padding: 0.35rem;
+    box-sizing: border-box;
     
-    background-color: var(--search);
-    border: 0.07cm solid var(--secondary);
-    border-radius: 20px;
+    background-color: var(--surfaceAlt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: var(--softShadow);
 
     &:focus-within{
         animation-name: ${inputSelected};
@@ -166,42 +169,55 @@ const UserNameInputContainer = styled.div`
         animation-fill-mode: forwards;
         animation-duration: 0.5s;
     }
+
+    @media screen and (max-width: 760px) {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        min-height: auto;
+        padding: 0.75rem;
+        border-radius: var(--radiusLg);
+    }
 `
 const SearchSpan = styled.span`
     position: relative;
-    margin-left: 20px;
+    margin-left: 1rem;
 
-    font-size: 2rem;
+    font-size: 1.8rem;
+    color: var(--textSoft);
     rotate: 0deg;
     transition: all 0.5s;
     &:hover{
         cursor: pointer;
-        color: var(--background);
-        text-shadow: 0px 2px 5px var(--shadow);
+        color: var(--main);
+        text-shadow: 0px 2px 5px rgba(24, 125, 233, 0.18);
         animation-name: ${searchHover};
         animation-duration: 2s;
     }
 `
 const UserNameInput = styled.input`
-    padding: 10px;
+    flex: 1 1 260px;
+    min-width: 0;
+    padding: 0.85rem 0.5rem;
     width: 100%;
-    height: 30px;
+    min-height: 30px;
 
     resize: none;
     outline: none;
     font-size: 1rem;
     font-weight: 500;
+    color: var(--text);
     background-color: transparent;
-    border: 0.07cm solid transparent;
+    border: 1px solid transparent;
     border-radius: 20px;
     &::placeholder{
-        color: var(--shadow);
+        color: var(--textSoft);
     };
 
     @media (prefers-color-scheme: dark){
-        color: var(--background);
+        color: var(--text);
         &::placeholder{
-            color: var(--background);
+            color: var(--textSoft);
         };
     }
 `
@@ -210,24 +226,29 @@ const SelectContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: fit-content;
-    height: 35px;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-left: 10px;
-    margin-right: 20px;
+    flex: 0 0 auto;
+    min-height: 48px;
+    padding: 0 1rem;
+    margin-left: 0.35rem;
+    margin-right: 0.75rem;
 
-    background-color: var(--main);
-    border: 0.1cm transparent;
-    border-radius: 20px;
+    background: var(--cardGradientSoft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
 
     @media (prefers-color-scheme: dark){
-        background-color: whitesmoke;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    @media screen and (max-width: 760px) {
+        margin: 0;
+        min-width: calc(100% - 3.5rem);
     }
 `
 const Select = styled.select`
     outline: none;
-    width: 80px;
+    width: fit-content;
+    min-width: 140px;
     height: 30px;
 
     appearance: none;
@@ -235,20 +256,27 @@ const Select = styled.select`
     border: none;
     font-size: 1rem;
     font-weight: 500;
-    color: var(--background);
+    color: var(--text);
 
     @media (prefers-color-scheme: dark){
-        color: var(--mainDark);
+        color: var(--text);
     }
 `
 const Option = styled.option``
 
 const CancelSpan = styled(SearchSpan)`
-    margin-left: 0px;
-    margin-right: 20px;
+    margin-left: 0;
+    margin-right: 1rem;
 
     &:hover{
         color: var(--error);
         animation: none;
+    }
+
+    @media screen and (max-width: 760px) {
+        position: absolute;
+        top: 0.9rem;
+        right: 0.8rem;
+        margin: 0;
     }
 `

@@ -1,7 +1,3 @@
-@import "./index.css";
-
-/* In light mode: text-color = white */
-/* In dark mode: text-color = background */
 :root{
   --background: white; 
   --main: rgb(24, 125, 233);
@@ -14,15 +10,44 @@
   --mainDark: rgb(5, 74, 148);
   --secondaryDark:  rgb(5, 74, 148);
   --shadowDark: rgba(180, 175, 175, 0.794);
+
+  --surface: rgb(255, 255, 255);
+  --surfaceAlt: rgba(255, 255, 255, 0.88);
+  --panel: rgba(255, 255, 255, 0.76);
+  --text: rgb(20, 37, 62);
+  --textSoft: rgba(20, 37, 62, 0.72);
+  --border: rgba(24, 125, 233, 0.18);
+  --cardShadow: 0 20px 45px rgba(22, 48, 92, 0.14);
+  --softShadow: 0 12px 28px rgba(36, 33, 33, 0.12);
+  --pageMaxWidth: 1240px;
+  --headerHeight: 72px;
+  --radiusLg: 28px;
+  --radiusMd: 20px;
+  --radiusSm: 14px;
+  --cardGradient: linear-gradient(135deg, rgba(24, 125, 233, 0.96), rgba(50, 157, 192, 0.96));
+  --cardGradientSoft: linear-gradient(135deg, rgba(24, 125, 233, 0.12), rgba(50, 157, 192, 0.16));
+}
+
+html {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  min-height: 100vh;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(50, 157, 192, 0.18), transparent 32%),
+    linear-gradient(180deg, rgba(24, 125, 233, 0.08), transparent 24%),
+    var(--background);
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 code {
@@ -30,26 +55,26 @@ code {
     monospace;
 }
 
-
-/* 
-dark
-stateCopy.background = "rgba(81, 80, 80, 0.794)"
-stateCopy.main = "rgb(5, 74, 148)"
-stateCopy.secondary = "rgb(5, 74, 148)"
-stateCopy.shadow = "rgba(81, 80, 80, 0.794)" */
-
-/* 
-light
-var stateCopy = {...state}
-stateCopy.background = "white"
-stateCopy.main = "rgb(24, 125, 233)"
-stateCopy.secondary = "rgb(50, 157, 192)"
-stateCopy.shadow = "rgba(36, 33, 33, 0.705)" */
-
-/* error: "rgb(193, 55, 55)" */
-
 @media (prefers-color-scheme: dark){
+  :root {
+    --surface: rgba(14, 22, 38, 0.96);
+    --surfaceAlt: rgba(21, 32, 53, 0.88);
+    --panel: rgba(17, 25, 41, 0.88);
+    --text: rgb(241, 246, 255);
+    --textSoft: rgba(241, 246, 255, 0.72);
+    --border: rgba(180, 175, 175, 0.18);
+    --cardShadow: 0 24px 48px rgba(0, 0, 0, 0.34);
+    --softShadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+    --cardGradient: linear-gradient(135deg, rgba(5, 74, 148, 0.96), rgba(18, 107, 184, 0.96));
+    --cardGradientSoft: linear-gradient(135deg, rgba(5, 74, 148, 0.22), rgba(18, 107, 184, 0.16));
+  }
+
   body{
+    color: var(--text);
     background-color: var(--backgroundDark);
+    background:
+      radial-gradient(circle at top, rgba(18, 107, 184, 0.24), transparent 30%),
+      linear-gradient(180deg, rgba(5, 74, 148, 0.18), transparent 22%),
+      var(--backgroundDark);
   }
 }

@@ -21,28 +21,30 @@ const PageSelect = (props: PropsType) => {
 export default PageSelect;
 
 const StyledPageSelectContainer = styled.button<{isselected: "true" | "false"}>`
-    width: 40px;
-    min-width: fit-content;
-    height: 40px;
-    margin: 0px 10px 0px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 0.95rem;
 
     user-select: none;
-    font-size: 1.3rem;
-    font-weight: 500;
-    background-image: ${props => props.isselected === "true" ? "linear-gradient(to bottom right, whitesmoke, whitesmoke)" : "linear-gradient(to bottom right, var(--main), var(--secondary))"};
+    font-size: 1.05rem;
+    font-weight: 700;
+    background-image: ${props => props.isselected === "true" ? "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.95))" : "var(--cardGradient)"};
     background-repeat: no-repeat;
-    border: ${props => props.isselected === "true" ? "0.05cm solid" : "none"};
-    border-color: ${props => props.isselected === "true" && "var(--secondary)"};
+    border: 1px solid ${props => props.isselected === "true" ? "var(--secondary)" : "rgba(255,255,255,0.22)"};
     color: ${props => props.isselected === "true" ? "var(--main)" : "whitesmoke"};
-    border-radius: 20px;
+    border-radius: 999px;
+    box-shadow: ${props => props.isselected === "true" ? "none" : "var(--softShadow)"};
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 
     &:hover{
-        cursor:pointer
+        cursor:pointer;
+        transform: translateY(-1px);
+        box-shadow: var(--cardShadow);
     };
 
     @media (prefers-color-scheme: dark){
         color: ${props => props.isselected === "true" ? "var(--mainDark)" : "whitesmoke"};
-        background-image: ${props => props.isselected === "true" ? "linear-gradient(to bottom right, var(--shadowDark), var(--shadowDark))" : "linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark))"};
-        border-color: ${props => props.isselected === "true" && "var(--secondaryDark)"};
+        background-image: ${props => props.isselected === "true" ? "linear-gradient(135deg, rgba(180, 175, 175, 0.9), rgba(180, 175, 175, 0.9))" : "var(--cardGradient)"};
+        border-color: ${props => props.isselected === "true" ? "var(--secondaryDark)" : "rgba(255,255,255,0.14)"};
     }
 `

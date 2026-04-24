@@ -34,47 +34,49 @@ const StyledMessageContainer = styled.div<{loggedInUserID: NullableType<number>,
     position: relative;
     flex-wrap: nowrap;
     flex-direction: column;
-    align-items: center;
-    min-width: 60%;
-    width: fit-content;
-    max-width: 70%;
+    align-items: flex-start;
+    width: min(100%, 560px);
+    max-width: 88%;
     height: fit-content;
-    margin: 20px;
-    margin-left: ${(props) => props.loggedInUserID === props.userID ? 'auto' : '20px'};
+    margin: 0 0 1rem;
+    margin-left: ${(props) => props.loggedInUserID === props.userID ? 'auto' : '0'};
+    padding: 0.85rem;
+    box-sizing: border-box;
 
-    border-radius: 20px;
-    // background-image: linear-gradient(to bottom right, var(--main), var(--secondary))
-    background-color: var(--background);
+    border-radius: var(--radiusMd);
+    background-color: ${props => props.loggedInUserID === props.userID ? "rgba(24, 125, 233, 0.12)" : "var(--surface)"};
+    border: 1px solid var(--border);
+    box-shadow: var(--softShadow);
 `
 
 const AuthorNameContainer = styled(ProfileNameContainer)`
-    min-width: 30%;
+    min-width: unset;
     width: fit-content;
-    max-width: 50%;
-    height: 40px;
-    align-self: flex-top;
-    margin-left: 10px;
-    margin-top: 10px;
-    margin-bottom: 0px;
+    max-width: 100%;
+    min-height: 42px;
+    align-self: flex-start;
+    margin: 0 0 0.75rem;
+    padding: 0.35rem 0.85rem 0.35rem 0.35rem;
+    background-color: var(--cardGradientSoft);
 `
 const AuthorImage = styled(NavLink)<{image: null | string, isLoggedInUser: boolean, className: string | null}>`
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    width: 30px;
-    margin-left: 10px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
 
-    border-radius: 100vh;
-    background-color: whitesmoke;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.92);
     background-image: ${(props) => props.image === null ? "none" : `url(${props.image})`};
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
+    background-position: center;
     background-origin: border-box;
     font-size: 1.5em;
     text-decoration: none;
-    color: black;
+    color: var(--main);
 
     &:hover{
         cursor: pointer;
@@ -93,15 +95,13 @@ const AuthorName = styled(ProfileName)`
 
 const MessageText = styled.p`
     display: block;
-    width: 90%;
-    max-width: 90%;
+    width: 100%;
     height: fit-content;
-    max-height: 400px;
+    margin: 0;
 
-    font-size: 1.3em;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text);
     word-wrap: break-word;
-    overflow-y: scroll;
-    overflow-x: none;
-    resize: none;
-    outline: none;
+    overflow-wrap: anywhere;
 `

@@ -63,13 +63,14 @@ const Form = styled.div`
     display: flex;
     position: relative;
     flex-wrap: nowrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: fit-content;
+    gap: 0.85rem;
     align-self: flex-end;
-    
-    border-radius: 20px;
+    padding: 1rem;
+    box-sizing: border-box;
+    background-color: var(--surface);
 `
 
 const Button = styled.button`
@@ -78,36 +79,29 @@ const Button = styled.button`
     justify-content: center;
     align-items: center;
     width: fit-content;
-    height: 35px;
-    margin-bottom: 20px;
-    padding: 20px;
+    min-height: 48px;
+    padding: 0.85rem 1rem;
 
     font-size: 1rem;
     font-weight: 800;
     text-decoration: none;
     color: var(--main);
-    background-color: whitesmoke;
-    border: 0.1cm transparent;
-    border-radius: 20px;
+    background: var(--cardGradientSoft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
 
-    transition: all 0.2s;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
 
     &:hover{
         cursor: pointer;
-        animation-duration: 1s;
+        transform: translateY(-1px);
     }
-    &:active{
-        background-color: var(--shadow);
-        color: whitesmoke;
-        transition: all 0.2s;
+    &:disabled{
+        cursor: wait;
+        opacity: 0.7;
     }
 
     @media (prefers-color-scheme: dark){
         color: var(--mainDark);
-        &:active{
-            color: var(--whitesmoke);
-            background-color: var(--shadowDark);
-        };
     }
 `
-

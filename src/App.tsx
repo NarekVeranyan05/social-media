@@ -24,8 +24,8 @@ function App() {
   const authUser = () => dispatch(authUserThunkCreator())
 
   useEffect(() => {
-    authUser()
-  })
+    authUser();
+  }, [isLoggedIn])
 
   if(!isInitialized) return (<div></div>)
   return (

@@ -34,7 +34,7 @@ let initial = {
     maxPage: 6, //total amount of pages
     users:[
         {     
-            userName: "VaL_ne_kuzuberdin2",
+            userName: "",
             userID: 28201,
             arrayID: 0,
             photos: {
@@ -114,6 +114,7 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, UnknownAction>
 export const createUsersDataThunkCreator = (count: number, page: number, friend: NullableType<boolean> = null, term: string = ""): ThunkType => async(dispatch) => {
     dispatch(usersDataActionCreators.changeIsLoadingActionCreator(true))
     let response = await usersAPI.getUsers(count, page, friend, term)
+
     dispatch(usersDataActionCreators.createUsersDataActionCreator(response.items, response.totalCount))
     dispatch(usersDataActionCreators.changeIsLoadingActionCreator(false))
 }

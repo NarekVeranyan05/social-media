@@ -135,10 +135,10 @@ export const changeStatusThunkCreator = (newStatus: string | null): ThunkType =>
 }
 export const changeUserImagesThunkCreator = (newPhoto: File, loggedInUserID: number | null): ThunkType => async(dispatch) => {
     let data = new FormData()
-    data.append("image", newPhoto)
-    let response = await profileAPI.putPhoto(data);
+    data.append("file", newPhoto)
+    let response = await profileAPI.putPhoto(data)
     if(response.resultCode === ResultCodeType.success){
-        dispatch(createUserDataThunkCreator(loggedInUserID, true))
+        await dispatch(createUserDataThunkCreator(loggedInUserID, true))
     }
     else if("messages" in response && response.messages?.length !== 0){
         alert(`${response.messages[0]}`)

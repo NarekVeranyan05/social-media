@@ -69,46 +69,47 @@ const StyledChatContainer = styled.div`
     display: block;
     position: fixed;
     right: 20px;
-    width: 430px;
-    height: calc(100% - 120px);
+    width: min(430px, calc(100vw - 40px));
+    height: min(680px, calc(100% - 120px));
     z-index: 300;
 `
 const ChatBox = styled.div`
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     position: relative;
     width: 100%;
     height: 100%;
     margin: 0 auto;
     margin-top: 20px;
 
-    background-image: linear-gradient(to bottom right, var(--main), var(--secondary));
-    box-shadow: 0px 2px 6px var(--shadow), 0px -2px 6px var(--shadow); 
-    border: 0.1cm solid var(--shadow);
-    border-radius: 20px;
-    overflow-y: scroll;
-    scroll-snap-type:y mandatory;
+    background-color: var(--surface);
+    box-shadow: var(--cardShadow); 
+    border: 1px solid var(--border);
+    border-radius: var(--radiusLg);
+    overflow: hidden;
 
     @media (prefers-color-scheme: dark){
-        background-image: linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark));
+        background-color: var(--surface);
     }
 `
 const MessagesContainer = styled.div`
+    box-sizing: border-box;
+    flex: 1 1 auto;
     width: 100%;
-    height: calc(100% - 110px);
+    min-height: 0;
+    padding: 1rem;
 
-    border-bottom: var(--background) solid 0.1cm;
-    background-color: var(--shadow);
-    overflow-y: scroll;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(24, 125, 233, 0.08), transparent 30%), var(--surfaceAlt);
+    overflow-y: auto;
 
     @media (prefers-color-scheme: dark){
-        border-bottom: var(--backgroundDark) solid 0.1cm;
+        border-bottom: 1px solid var(--border);
     }
 `
 
 const Span = styled.span`
-    color: black;
+    color: var(--text);
     transition: all 0.5s;
 `
 const Button = styled.button`
@@ -119,17 +120,17 @@ const Button = styled.button`
     width: 70px;
     height: 70px; 
 
-    border: 0.1cm solid var(--shadow);
+    border: 1px solid var(--border);
     border-radius: 100vw;
-    background-color: var(--background);
-    box-shadow: 0px 2px 6px var(--shadow), 0px -2px 6px var(--shadow); 
+    background-color: var(--surface);
+    box-shadow: var(--cardShadow); 
     font-size: 1rem;
     z-index: 300;
     transition: all 0.5s;
 
     &:hover{
         cursor: pointer;
-        box-shadow: none;
+        box-shadow: var(--softShadow);
     }
     &:hover ${Span} {
         background: linear-gradient(to right top, var(--main), var(--secondary) 100%); 
@@ -139,7 +140,6 @@ const Button = styled.button`
     }
 
     @media (prefers-color-scheme: dark){
-        box-shadow: 0px 2px 6px var(--shadowDark), 0px -2px 6px var(--shadowDark); 
         &:hover ${Span} {
             background: linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark));
             -webkit-background-clip: text;

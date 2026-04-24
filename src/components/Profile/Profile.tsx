@@ -1,23 +1,30 @@
 import styled from "styled-components"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 import ProfileForm from "./ProfileForm"
 import { RootState, useAppDispatch, useAppSelector } from "../../Redux/Store"
 import { Skeleton } from "@mui/material"
-import { getBackgroundImage, getFollowButtonAbility, getIsFollowed, getIsLoggedInUser, getUserID, getUserImage, getUserLoadingStatus, getUserName } from "../../Redux/UserDataSelectors"
+import {
+    getBackgroundImage,
+    getFollowButtonAbility,
+    getIsFollowed,
+    getIsLoggedInUser,
+    getUserID,
+    getUserImage,
+    getUserLoadingStatus,
+    getUserName,
+} from "../../Redux/UserDataSelectors"
 import { getLoggedInStatus, getLoggedInUserID } from "../../Redux/AuthDataSelectors"
 import { createUserDataThunkCreator } from "../../Redux/UserDataReducer"
 import { changeConnectivityThunkCreator } from "../../Redux/UsersDataReducer"
 import Description from "../../components/Profile/Description/Description"
 
-const Profile = (props: {params: {userID: number}, userID: number}) => {
-    let [isPinned, setIsPinned] = useState(false) //false => didn't edit prevously, true => has been edited at least once
-    const setIsPinnedManager = (newPinStatus: boolean) => {
-        setIsPinned(newPinStatus)
-    }
+const Profile = (props: { params: { userID: number }, userID: number }) => {
+    const [isPinned, setIsPinned] = useState(false)
+
     const isLoading = useAppSelector((state: RootState) => getUserLoadingStatus(state))
     const isLoggedIn = useAppSelector((state: RootState) => getLoggedInStatus(state))
-    const loggedInUserID  = useAppSelector((state: RootState) => getLoggedInUserID(state))
-    const isLoggedInUser: boolean = useAppSelector((state: RootState) => getIsLoggedInUser(state))
+    const loggedInUserID = useAppSelector((state: RootState) => getLoggedInUserID(state))
+    const isLoggedInUser = useAppSelector((state: RootState) => getIsLoggedInUser(state))
     const userID = useAppSelector((state: RootState) => getUserID(state))
     const userName = useAppSelector((state: RootState) => getUserName(state))
     const userImage = useAppSelector((state: RootState) => getUserImage(state))
@@ -26,258 +33,318 @@ const Profile = (props: {params: {userID: number}, userID: number}) => {
     const followButtonAbility = useAppSelector((state: RootState) => getFollowButtonAbility(state))
 
     const dispatch = useAppDispatch()
-    const createUserData = (userID: number | null, isLoggedIn: boolean, isOtherUser: boolean = false) => { //if not logged in, the request for isFollowed can't be done
-        dispatch(createUserDataThunkCreator(userID, isLoggedIn, isOtherUser))
-    }
-    const changeConnectivityDispatcher = (userID: number | null, typeOfChange: "follow" | "unfollow") => {
-        dispatch(changeConnectivityThunkCreator(userID, null, typeOfChange))
+
+    const createUserData = (id: number | null, loggedIn: boolean, isOtherUser = false) => {
+        dispatch(createUserDataThunkCreator(id, loggedIn, isOtherUser))
     }
 
-    useMemo<void>(() => {createUserData(null, isLoggedIn)}, [null, isLoggedIn])
+    const changeConnectivityDispatcher = (id: number | null, typeOfChange: "follow" | "unfollow") => {
+        dispatch(changeConnectivityThunkCreator(id, null, typeOfChange))
+    }
+
     useEffect(() => {
-        if(isLoggedIn === true && props.params.userID === undefined)
+        createUserData(null, isLoggedIn)
+
+        if (isLoggedIn === true && props.params.userID === undefined) {
             createUserData(loggedInUserID, isLoggedIn)
-        else if(props.params.userID !== undefined)
+        } else if (props.params.userID !== undefined) {
             createUserData(props.params.userID, isLoggedIn, true)
-    }, [props.params.userID])
+        }
+    }, [props.params.userID, isLoggedIn, loggedInUserID])
 
     const changeConnectivity = () => {
-        let typeOfChange: "unfollow" | "follow"
-        if(isFollowed === true){
-            typeOfChange = "unfollow"
-            changeConnectivityDispatcher(userID, typeOfChange)
-        }
-        else if(isFollowed === false){
-            typeOfChange = "follow"
-            changeConnectivityDispatcher(userID, typeOfChange)
+        if (isFollowed === true) {
+            changeConnectivityDispatcher(userID, "unfollow")
+        } else if (isFollowed === false) {
+            changeConnectivityDispatcher(userID, "follow")
         }
     }
-    
+
     return (
         <StyledProfileContainer data-testid="profile">
-                <MainInfo>
-                    {/* Scroll down to view Description */}
-                    
-                    {/* Top element */}
-                    {!isPinned ? 
-                        <BackgroundImage image={backgroundImage}>
-                            <ProfileNameContainer>
-                                {isLoggedInUser ? <ProfileForm loggedInUserID={loggedInUserID} userImage={userImage}/> : <ProfileImage isLoggedInUser={isLoggedInUser} className={userImage === null ? "material-symbols-outlined" : null} image={userImage}>{userImage === null && "person"}</ProfileImage>}
-                                {!isLoading ? <ProfileName role="userName">{userName}</ProfileName> : <Skeleton variant="rounded" width={150} animation="pulse" style={{backgroundColor: "whitesmoke", marginLeft: "10px", marginRight: "10px"}}></Skeleton>}
-                                {(!isLoggedInUser && isLoggedIn) && <Follow onClick={changeConnectivity} disabled={!followButtonAbility}>{!isFollowed ? "Follow" : "Unfollow"}</Follow>}
-                            </ProfileNameContainer>    
-                            {isLoading && <Skeleton variant="rounded" animation="pulse" width={'100%'} height={'100%'} style={{position: "absolute"}}/>}
-                        </BackgroundImage> 
-                    :
-                        <BackgroundImageUnpinned image={backgroundImage}>
-                            <ProfileNameContainer>
-                                {isLoggedInUser ? <ProfileForm loggedInUserID={loggedInUserID} userImage={userImage} /> : <ProfileImage isLoggedInUser={isLoggedInUser} className={userImage === null ? "material-symbols-outlined" : null} image={userImage}>{userImage === null && "person"}</ProfileImage>}
-                                {!isLoading ? <ProfileName role="userName">{userName}</ProfileName> : <Skeleton variant="rounded" width={150} animation="pulse" style={{backgroundColor: "whitesmoke", marginLeft: "10px", marginRight: "10px"}}></Skeleton>}
-                                {(!isLoggedInUser && isLoggedIn) && <Follow onClick={changeConnectivity} disabled={!followButtonAbility}>{!isFollowed ? "Follow" : "Unfollow"}</Follow>}
-                            </ProfileNameContainer>    
-                        </BackgroundImageUnpinned> 
-                    }
+            <MainInfo>
+                <Hero image={backgroundImage} $pinned={isPinned}>
+                    <HeroOverlay />
+                    <ProfileNameContainer $pinned={isPinned}>
+                        {isLoggedInUser ? (
+                            <ProfileForm loggedInUserID={loggedInUserID} userImage={userImage} />
+                        ) : (
+                            <ProfileImage
+                                isLoggedInUser={isLoggedInUser}
+                                className={userImage === null ? "material-symbols-outlined" : undefined}
+                                image={userImage}
+                                title={isLoggedInUser ? "Change profile image" : undefined}
+                            >
+                                {userImage === null && "person"}
+                            </ProfileImage>
+                        )}
 
-                    {/* Bottom element */}
-                    {!isPinned ? 
-                        <DescriptionCoverContainer>
-                            <Description isLoading={isLoading} isPinned={isPinned} setIsPinnedManager={setIsPinnedManager}/>
-                        </DescriptionCoverContainer>
-                    :
-                        <DescriptionCoverContainerPinned>
-                            <Description isLoading={isLoading} isPinned={isPinned} setIsPinnedManager={setIsPinnedManager}/>
-                        </DescriptionCoverContainerPinned>
-                    }
-                </MainInfo>
+                        <NameBlock>
+                            {!isLoading ? (
+                                <ProfileName role="userName">{userName}</ProfileName>
+                            ) : (
+                                <Skeleton
+                                    variant="rounded"
+                                    width={180}
+                                    height={28}
+                                    animation="pulse"
+                                    style={{ backgroundColor: "whitesmoke" }}
+                                />
+                            )}
+                        </NameBlock>
+
+                        {(!isLoggedInUser && isLoggedIn) && (
+                            <Follow
+                                onClick={changeConnectivity}
+                                disabled={!followButtonAbility}
+                                $active={!!isFollowed}
+                            >
+                                {!isFollowed ? "Follow" : "Unfollow"}
+                            </Follow>
+                        )}
+                    </ProfileNameContainer>
+
+                    {isLoading && (
+                        <HeroLoading>
+                            <Skeleton
+                                variant="rounded"
+                                animation="pulse"
+                                width="100%"
+                                height="100%"
+                                style={{ backgroundColor: "rgba(245,245,245,0.24)" }}
+                            />
+                        </HeroLoading>
+                    )}
+                </Hero>
+
+                <DescriptionShell $pinned={isPinned}>
+                    <Description
+                        isLoading={isLoading}
+                        isPinned={isPinned}
+                        setIsPinnedManager={setIsPinned}
+                    />
+                </DescriptionShell>
+            </MainInfo>
         </StyledProfileContainer>
     )
 }
 
 export default Profile
 
-//styled components
 const StyledProfileContainer = styled.div`
     display: flex;
     position: relative;
-    width: 100vw;
-    height: calc(100vh - 60px);
+    width: 100%;
+    min-height: calc(100vh - var(--headerHeight));
+    padding: 1.75rem clamp(1rem, 2.4vw, 1.75rem) 3rem;
+    box-sizing: border-box;
 `
+
 const MainInfo = styled.div`
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     position: relative;
-    width: 90vw;
-    height: 50vh;
-    min-height: 250px;
+    width: min(100%, 980px);
+    min-height: min(78vh, 860px);
     margin: 0 auto;
-    margin-top: 40px;
+    border-radius: var(--radiusLg);
+    overflow: hidden;
+    background-color: var(--surface);
+    box-shadow: var(--cardShadow);
 
-    border-radius: 20px;
-    background-color: whitesmoke;
-    overflow-y: scroll;
-    scroll-snap-type:y mandatory;
-
-    &::-webkit-scrollbar{
-        display: none;
-    }
-    @media screen and (min-width: 900px){
-        margin-top: 40px;
-        margin-left: 20px;
-        width: 60vw;
-        height: 60vh;
+    @media screen and (max-width: 760px) {
+        min-height: unset;
     }
 `
 
-const BackgroundImage = styled.div<{image: null | string}>`
+const Hero = styled.div<{ image: null | string; $pinned: boolean }>`
     display: flex;
     align-items: flex-end;
     position: relative;
     width: 100%;
-    min-height: 98%;
+    min-height: 380px;
+    padding: 1rem;
+    box-sizing: border-box;
 
-    background-image: ${(props) => props.image === null ? "linear-gradient(to bottom right, var(--main), var(--secondary))" : `url(${props.image})`};
+    background-image: ${({ image }) =>
+            image === null
+                    ? "linear-gradient(to bottom right, var(--main), var(--secondary))"
+                    : `url(${image})`};
     background-repeat: no-repeat;
     background-size: cover;
-    border: 0.1cm solid var(--main);
-    border-radius: 20px;
-    scroll-snap-align: start;
-    @media (prefers-color-scheme: dark){
-        background-image:${(props) => props.image === null ? "linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark))" : `url(${props.image})`};
-    }
-`
-const DescriptionCoverContainer = styled.div`
-    display: flex;
-    width: 100%;
-    height: 100%;
-    margin-top: 40px;
+    background-position: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radiusLg);
 
-    background-image: linear-gradient(to bottom right, var(--main), var(--secondary));
-    border-radius: 20px;
-    
-    @media (prefers-color-scheme: dark){
-        background-image: linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark));
+    @media (prefers-color-scheme: dark) {
+        background-image: ${({ image }) =>
+                image === null
+                        ? "linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark))"
+                        : `url(${image})`};
+    }
+
+    @media screen and (max-width: 760px) {
+        min-height: 300px;
     }
 `
 
-export const ProfileNameContainer = styled.div`
+const HeroOverlay = styled.div`
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+            linear-gradient(to top, rgba(8, 12, 20, 0.72), rgba(8, 12, 20, 0.08) 62%, rgba(8, 12, 20, 0.18));
+    pointer-events: none;
+`
+
+export const ProfileNameContainer = styled.div<{ $pinned: boolean }>`
     display: flex;
     align-items: center;
-    min-width: 30%;
+    gap: 0.85rem;
     width: fit-content;
-    max-width: 50%;
-    height: 80px;
+    max-width: min(100%, 720px);
+    min-height: 84px;
     margin-right: auto;
-    margin-left: 20px;
-    margin-bottom: 20px;
+    padding: 0.7rem 1rem 0.7rem 0.7rem;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 
-    background-color: var(--shadow);
-    border-radius: 100vw;
-    z-index: 100;
+    background-color: rgba(17, 29, 50, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: ${({ $pinned }) => ($pinned ? "var(--radiusLg)" : "999px")};
+    backdrop-filter: blur(16px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+
+    @media screen and (max-width: 640px) {
+        width: 100%;
+        max-width: 100%;
+        flex-wrap: wrap;
+        border-radius: var(--radiusMd);
+        padding: 0.8rem;
+    }
 `
 
-export const  ProfileImage = styled.span<{image: null | string, isLoggedInUser: boolean, className: string | null}>`
+const NameBlock = styled.div`
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1;
+`
+
+const ProfileImage = styled.span<{ image: null | string; isLoggedInUser: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    width: 60px;
-    margin-left: 10px;
-    height: 60px;
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    border-radius: 999px;
 
-    border-radius: 100vh;
-    background-color: whitesmoke;
-    background-image: ${(props) => props.image === null ? "none" : `url(${props.image})`};
+    background-color: rgba(255, 255, 255, 0.92);
+    background-image: ${({ image }) => (image === null ? "none" : `url(${image})`)};
     background-repeat: no-repeat;
-    background-size: contain;
-    background-origin: border-box;
+    background-size: cover;
+    background-position: center;
+    color: var(--main);
+    font-size: 3rem;
+    user-select: none;
 
-    font-size: 3em;
-    &:hover{
-        cursor: ${props => props.isLoggedInUser ? "pointer" : "default"};
-        background-color: ${props => props.isLoggedInUser && "gray"};
-        &:after{
-            content: '${props => props.isLoggedInUser && "change"}';
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        cursor: ${({ isLoggedInUser }) => (isLoggedInUser ? "pointer" : "default")};
+        transform: ${({ isLoggedInUser }) => (isLoggedInUser ? "translateY(-1px)" : "none")};
+        background-color: ${({ isLoggedInUser }) =>
+    isLoggedInUser ? "rgba(255, 255, 255, 0.78)" : "rgba(255, 255, 255, 0.92)"};
+
+        &::after {
+            content: ${({ isLoggedInUser }) => (isLoggedInUser ? "'change'" : "''")};
             position: absolute;
-            font-size: 0.5rem;
-            color: white;
+            bottom: 6px;
+            font-size: 0.52rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: var(--main);
+            text-transform: uppercase;
         }
     }
 `
 
 export const ProfileName = styled.p`
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
     align-items: center;
+    min-width: 0;
     width: fit-content;
-    max-width: 60%;
-    height: fit-content;
-    padding-right: 10px;
-    padding-left: 10px;
+    max-width: 100%;
+    margin: 0;
+    padding-right: 0.25rem;
 
-    font-size: 1.3rem;
+    font-size: clamp(1.2rem, 2vw, 1.45rem);
+    font-weight: 700;
     color: whitesmoke;
-    overflow-x: scroll;
-    &::-webkit-scrollbar{
-        display: non
-    }
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `
 
-const Follow = styled.button`
-    display: flex;
-    position: absolute;
-    right: 0;
+const Follow = styled.button<{ $active: boolean }>`
+    display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: fit-content;
-    padding: 20px;
-    height: 35px;
-    margin-right: 20px;
+    min-height: 44px;
+    padding: 0.75rem 1.15rem;
+    margin-left: auto;
+    flex: 0 0 auto;
 
     font-size: 1rem;
     font-weight: 800;
-    text-decoration: none;
     color: var(--main);
-    background-color: whitesmoke;
-    border: 0.1cm transparent;
-    border-radius: 20px;
-    transition: all 0.2s;
+
+    background-color: ${({ $active }) => ($active ? "rgba(255, 255, 255, 0.88)" : "rgba(255, 255, 255, 0.96)")};
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 999px;
+    box-shadow: var(--softShadow);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+
     &:hover {
         cursor: pointer;
-    };
-    &:active {
-        background-color: var(--shadow);
-        color: whitesmoke;
+        transform: translateY(-1px);
+        filter: brightness(0.98);
+    }
+
+    &:disabled {
+        cursor: wait;
+        opacity: 0.7;
+        transform: none;
+    }
+
+    @media screen and (max-width: 640px) {
+        width: 100%;
+        margin-left: 0;
     }
 `
 
-const DescriptionCoverContainerPinned = styled.div`
+const DescriptionShell = styled.div<{ $pinned: boolean }>`
     display: flex;
     width: 100%;
-    height: 100%;
-    margin-top: 40px;
+    min-height: 340px;
+    margin-top: 1rem;
 
-    background-image: linear-gradient(to bottom right, var(--main), var(--secondary));
-    border-radius: 20px;
-    
-    @media (prefers-color-scheme: dark){
-        background-image: linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark));
+    background-image: var(--cardGradient);
+    border-radius: var(--radiusLg);
+    overflow: hidden;
+
+    @media (prefers-color-scheme: dark) {
+        background-image: var(--cardGradient);
     }
 `
-const BackgroundImageUnpinned = styled.div<{image: null | string}>`
-    display: flex;
-    align-items: flex-end;
-    position: relative;
-    width: 100%;
-    min-height: 98%;
 
-    background-image: ${(props) => props.image === null ? "linear-gradient(to bottom right, var(--main), var(--secondary))" : `url(${props.image})`};
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 0.1cm solid var(--main);
-    border-radius: 20px;
-    @media (prefers-color-scheme: dark){
-        background-image:${(props) => props.image === null ? "linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark))" : `url(${props.image})`};
-    }
+const HeroLoading = styled.div`
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
 `

@@ -3,9 +3,9 @@ import React from "react"
 import styled from "styled-components"
 
 const FriendSkeleton = ({amount}: {amount: number}) => {
-    let contacts = new Array(amount).fill(0).map((e) => {
+    let contacts = new Array(amount).fill(0).map((_, index) => {
         return (
-            <StyledContactContainer>
+            <StyledContactContainer key = {index}>
                 <Skeleton variant="circular" width={60} height={60}></Skeleton>
                 <UserName variant="rounded" width={120} height={20}></UserName>
             </StyledContactContainer>
@@ -25,21 +25,22 @@ export default FriendSkeleton
 const StyledContactContainer = styled.div`
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    aling-items; center;
+    align-items: center;
+    gap: 1rem;
     position: relative;
-    width: 90vw;
-    height: 60px;
-    margin-bottom: 40px;
-    padding: 10px;
-    border-top-left-radius: 20px;   
-    border-top-right-radius: 20px; 
+    width: 100%;
+    min-height: 84px;
+    margin: 0;
+    padding: 0.85rem 1rem;
+    box-sizing: border-box;
+    border-radius: var(--radiusMd);   
     
-    border-bottom: 0.1cm var(--secondary) solid;
+    background-color: var(--surfaceAlt);
+    border: 1px solid var(--border);
+    box-shadow: var(--softShadow);
 
     @media (prefers-color-scheme: dark){
-        background-color: var(--shadowDark);
-        border-bottom: 0.1cm var(--secondaryDark) solid;
+        background-color: var(--surfaceAlt);
     }
 `
 
@@ -49,6 +50,6 @@ const UserName = styled(Skeleton)`
     margin-left: 20px;
 
     @media (prefers-color-scheme: dark){
-        background-color: var(--shadowDark);
+        background-color: rgba(255, 255, 255, 0.14);
     }
 `

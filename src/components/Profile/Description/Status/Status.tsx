@@ -58,13 +58,19 @@ const StyledStatusContainer = styled.div`
     display: flex;
     align-items: center;
     width: calc(90% + 10px);
-    height: 20%;
+    min-height: 72px;
 `
 const StyledStatus = styled.p`
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin: 20px;
-    color: black;
+    width: 100%;
+    margin: 0;
+    padding: 1rem 1.1rem;
+    box-sizing: border-box;
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    font-weight: 700;
+    line-height: 1.5;
+    color: whitesmoke;
+    background-color: rgba(17, 29, 50, 0.26);
+    border-radius: var(--radiusMd);
 `
 
 const StatusWithMemo = React.memo(Status)

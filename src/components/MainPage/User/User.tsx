@@ -26,7 +26,7 @@ const User = (props: PropsType) => {
                 <UserImage className={props.userImage === null ? "material-symbols-outlined" : null} image={props.userImage}>{props.userImage===null && "person"}</UserImage>
             </UserImageContainer>
             <MainInfo>
-                {props.status !== null && <Status readOnly>{props.status}</Status>}
+                {props.status !== null && <Status readOnly value={props.status} />}
                 <Details>
                     <UserName>{props.userName}</UserName>
                     {props.isLoggedIn !== false && <Follow role={"unfollow-follow"} onClick={changeConnectivity} disabled={props.isConnecitivtyButtonDisabled}>{props.isFollowed === true ? "Unfollow" : "Follow"}</Follow>}
@@ -44,113 +44,121 @@ const StyledUserContainer = styled.div`
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
+    gap: clamp(1rem, 2vw, 1.4rem);
     position: relative;
-    width: 90vw;
-    min-width: fit-content;
-    height: 190px;
-    margin-bottom: 40px;
-    padding: 10px;
+    width: min(100%, 600px);
+    min-height: 210px;
+    margin: 0;
+    padding: clamp(1rem, 2vw, 1.2rem);
+    box-sizing: border-box;
     
-    background-image: linear-gradient(to bottom right, var(--main), var(--secondary));
-    border-radius: 20px;
+    background: var(--cardGradient);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: var(--radiusLg);
+    box-shadow: var(--cardShadow);
 
-    @media screen and (max-width: 470px){
-        min-width: 90vw;
-    }
-    @media screen and (min-width: 1110px){
-        width: 40vw;
-        min-width: fit-content;
+    @media screen and (max-width: 640px){
+        flex-direction: column;
+        width: 100%;
+        min-height: unset;
     }
 
     @media (prefers-color-scheme: dark){
-        background-image: linear-gradient(to bottom right, var(--mainDark), var(--secondaryDark));
-        &:active{
-            background-color: var(--shadowDark)
-        }
+        background: var(--cardGradient);
     }
 `
 const UserImageContainer = styled(NavLink)`
     display: block;
-    width: 190px;
-    min-width: fit-content;
-    height: 190px;
+    width: clamp(108px, 28vw, 190px);
+    min-width: clamp(108px, 28vw, 190px);
+    height: clamp(108px, 28vw, 190px);
     text-decoration: none;
-    border-radius: 20px;
+    border-radius: var(--radiusMd);
+
+    @media screen and (max-width: 640px) {
+        width: 100%;
+        min-width: 0;
+        height: 220px;
+    }
 `
 const UserImage = styled.span<{image: null | string, className: string | null}>`
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    min-width: fit-content;
     height: 100%;
 
     font-size: 5em;
-    color: black;
-    background-color: var(--shadow);
+    color: rgba(16, 24, 39, 0.75);
+    background-color: rgba(255, 255, 255, 0.72);
     background-image: ${props => props.image === null ? "none" : `url(${props.image})`};
     background-repeat: no-repeat;
-    background-size: contain;
-    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--radiusMd);
 
     @media (prefers-color-scheme: dark){
-        background-color: var(--shadowDark)
+        background-color: rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.88);
     }
 `
 const MainInfo = styled.div`
     display: flex;
     position: relative;
     flex-direction: column;
-    flex-wrap: nowrap;
-    width: calc(100% - 200px);
-    // min-width: fit-content;
-    height: 190px;
+    justify-content: space-between;
+    flex: 1 1 auto;
+    min-width: 0;
 `
 const Status = styled.textarea`
     display: flex;
-    text-overflow:ellipsis;
+    box-sizing: border-box;
     align-self: flex-start;
-    max-width: calc(100% - 20px);
-    min-width: calc(100% - 20px);
-    height: calc(70% - 20px);
-    padding: 10px;
+    width: 100%;
+    min-height: 116px;
+    padding: 1rem;
 
-    font-size: 1.5rem;
-    background-color: whitesmoke;
-    border-radius: 20px;
+    font-size: clamp(1rem, 1.8vw, 1.1rem);
+    line-height: 1.5;
+    color: var(--text);
+    background-color: rgba(255, 255, 255, 0.94);
+    border: none;
+    border-radius: var(--radiusMd);
     resize: none;
     outline: none;
+    overflow: auto;
 
     @media (prefers-color-scheme: dark){
-        background-color: var(--shadowDark)
+        background-color: rgba(13, 19, 31, 0.78);
+        color: var(--text);
     }
-    @media(max-width: 400px){
-        display: none;
+    @media(max-width: 640px){
+        min-height: 90px;
     }
 `
 const Details = styled.div`
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: baseline;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
     position: relative;
-    width: calc(100% - 10px);
-    min-width: fit-content;
-    height: 30%;
-    padding: 10px;
-    bottom: 0;
+    gap: 0.85rem;
+    width: 100%;
 `
 const UserName = styled.p`
     display: flex;
-    width: fit-content;
-    max-width: 75%;
+    align-items: center;
+    margin: 0;
+    flex: 1 1 220px;
+    min-width: 0;
 
-    font-size: 1.5rem;
-    font-weight: 500;
-    overflow: scroll;
+    font-size: clamp(1.2rem, 2vw, 1.45rem);
+    font-weight: 700;
+    color: whitesmoke;
+    overflow-wrap: anywhere;
     @media (prefers-color-scheme: dark){
-        color: var(--background);
+        color: var(--text);
     }
 ` 
 
@@ -159,27 +167,30 @@ const Follow = styled.button`
     justify-content: center;
     align-items: center;
     width: fit-content;
-    padding: 20px;
-    height: 35px;
+    min-height: 44px;
+    padding: 0.75rem 1.15rem;
 
     font-size: 1rem;
     font-weight: 800;
     text-decoration: none;
     color: var(--main);
-    background-color: whitesmoke;
-    border: 0.1cm transparent;
-    border-radius: 20px;
-    transition: all 0.2s;
+    background-color: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 999px;
+    box-shadow: var(--softShadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
     &:hover {
         cursor: pointer;
+        transform: translateY(-1px);
+        box-shadow: 0 14px 24px rgba(36, 33, 33, 0.14);
     };
-    &:active {
-        background-color: var(--shadow);
-        color: whitesmoke;
+    &:disabled {
+        cursor: wait;
+        opacity: 0.7;
     }
 
-    @media(max-width: 400px){
-        display: none;
+    @media(max-width: 640px){
+        width: 100%;
     }
     @media (prefers-color-scheme: dark){
         color: var(--mainDark);
